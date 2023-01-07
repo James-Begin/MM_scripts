@@ -15,20 +15,22 @@ from hummingbot.strategy.script_strategy_base import Decimal, OrderType, ScriptS
 class DCAExample(ScriptStrategyBase):
     #: Define markets to instruct Hummingbot to create connectors on the exchanges and markets you need
     markets = {"ascend_ex_paper_trade": {"BTC-USDT"}}
-    isbought = False
+    last_ordered_ts = 0.
+    #: Buying interval (in seconds)
+    buy_interval = 10.
+    #: Buying amount (in dollars - USDT)
+    buy_quote_amount = Decimal("100")
     
     
 
     def on_tick(self):
         # Check if it is time to buy
-        '''
-        if isbought:
+        if self.last_ordered_ts < (self.current_timestamp - self.buy_interval):
             # Lets set the order price to the best bid
-            #price = self.connectors["ascend_ex_paper_trade"].get_price("BTC-USDT", False)
+            price = self.connectors["binance_paper_trade"].get_price("BTC-USDT", False)
             amount = self.buy_quote_amount / price
-            self.sell("ascend_ex_paper_trade", "BTC-USDT", amount, OrderType.MARKET)
-            isbought = False
-            '''
+            self.buy("binance_paper_trade", "BTC-USDT", amount, OrderType.LIMIT, price)
+            self.last_ordered_ts = self.current_timestamp
             
 
     def did_create_buy_order(self, event: BuyOrderCreatedEvent):
