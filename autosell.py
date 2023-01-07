@@ -15,7 +15,7 @@ from hummingbot.strategy.script_strategy_base import Decimal, OrderType, ScriptS
 class DCAExample(ScriptStrategyBase):
     #: Define markets to instruct Hummingbot to create connectors on the exchanges and markets you need
     markets = {"ascend_ex_paper_trade": {"BTC-USDT"}}
-    isbought = false
+    isbought = False
     
     
 
@@ -26,7 +26,7 @@ class DCAExample(ScriptStrategyBase):
             #price = self.connectors["ascend_ex_paper_trade"].get_price("BTC-USDT", False)
             amount = self.buy_quote_amount / price
             self.sell("aescend_ex_paper_trade", "BTC-USDT", amount, OrderType.MARKET)
-            isbought = false
+            isbought = False
             
 
     def did_create_buy_order(self, event: BuyOrderCreatedEvent):
@@ -63,7 +63,7 @@ class DCAExample(ScriptStrategyBase):
         """5 n
         Method called when the connector notifies a buy order has been completed (fully filled)
         """
-        isbought = true
+        isbought = True
         self.logger().info(f"The buy order {event.order_id} has been completed")
 
     def did_complete_sell_order(self, event: SellOrderCompletedEvent):
