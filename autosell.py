@@ -21,12 +21,14 @@ class DCAExample(ScriptStrategyBase):
 
     def on_tick(self):
         # Check if it is time to buy
+        '''
         if isbought:
             # Lets set the order price to the best bid
             #price = self.connectors["ascend_ex_paper_trade"].get_price("BTC-USDT", False)
             amount = self.buy_quote_amount / price
-            self.sell("aescend_ex_paper_trade", "BTC-USDT", amount, OrderType.MARKET)
+            self.sell("ascend_ex_paper_trade", "BTC-USDT", amount, OrderType.MARKET)
             isbought = False
+            '''
             
 
     def did_create_buy_order(self, event: BuyOrderCreatedEvent):
@@ -63,7 +65,9 @@ class DCAExample(ScriptStrategyBase):
         """5 n
         Method called when the connector notifies a buy order has been completed (fully filled)
         """
-        isbought = True
+        price = self.connectors["ascend_ex_paper_trade"].get_price("BTC-USDT", False)
+        amount = self.buy_quote_amount / price
+        self.sell("ascend_ex_paper_trade", "BTC-USDT", amount, OrderType.MARKET)
         self.logger().info(f"The buy order {event.order_id} has been completed")
 
     def did_complete_sell_order(self, event: SellOrderCompletedEvent):
